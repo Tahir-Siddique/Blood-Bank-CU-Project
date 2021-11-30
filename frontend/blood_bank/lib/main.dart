@@ -1,4 +1,6 @@
 import 'package:blood_bank/Screens/onboarding_screen.dart';
+import 'package:blood_bank/Screens/splash_screen.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -11,6 +13,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Pulse Blood',
+      scrollBehavior: AppScrollBehavior(),
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -23,7 +26,15 @@ class MainApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: OnBoardingScreen(),
+      home: SplashScreen(),
     );
   }
+}
+
+class AppScrollBehavior extends MaterialScrollBehavior {
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+      };
 }

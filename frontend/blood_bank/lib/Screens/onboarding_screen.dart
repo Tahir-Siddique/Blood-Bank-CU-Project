@@ -1,10 +1,25 @@
+import 'dart:html';
+
+import 'package:blood_bank/Screens/welcome_screen.dart';
 import 'package:blood_bank/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class OnBoardingScreen extends StatelessWidget {
+class OnboardingScreen extends StatefulWidget {
+  const OnboardingScreen({Key key}) : super(key: key);
+
+  @override
+  _OnboardingScreenState createState() => _OnboardingScreenState();
+}
+
+class _OnboardingScreenState extends State<OnboardingScreen> {
+  int currentPage = 0;
+  bool isNextPageAvailable = true;
+  String nextPage = "Next";
+  PageController _pageController;
   @override
   Widget build(BuildContext context) {
+    _pageController = new PageController();
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -15,21 +30,8 @@ class OnBoardingScreen extends StatelessWidget {
               Container(
                 alignment: Alignment.topLeft,
                 padding: EdgeInsets.fromLTRB(
-                  10,
-                  10,
-                  10,
-                  10,
-                ),
-                child: Text(
-                  become_a_donor,
-                  style: TextStyle(color: text_color),
-                ),
-              ),
-              Container(
-                alignment: Alignment.topLeft,
-                padding: EdgeInsets.fromLTRB(
-                  10,
-                  10,
+                  30,
+                  30,
                   10,
                   10,
                 ),
@@ -43,34 +45,149 @@ class OnBoardingScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              Container(
-                padding: EdgeInsets.fromLTRB(
-                  10,
-                  10,
-                  10,
-                  10,
+              Expanded(
+                flex: 2,
+                child: PageView.builder(
+                  onPageChanged: (value) => setState(() {
+                    currentPage = value;
+
+                    if (currentPage == onboard_screens.length - 1) {
+                      setState(() {
+                        nextPage = "Done";
+                      });
+                    } else {
+                      setState(() {
+                        nextPage = "Next";
+                      });
+                    }
+                  }),
+                  controller: _pageController,
+                  itemCount: onboard_screens.length,
+                  itemBuilder: (context, index) => OnboardContent(
+                    image_path: onboard_screens[index]["image_path"],
+                    text: onboard_screens[index]["text"],
+                  ),
                 ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SvgPicture.asset(
-                      onboard1_image_path,
-                      height: MediaQuery.of(context).size.height / 2.5,
-                    ),
-                    Container(
-                      margin: EdgeInsets.fromLTRB(30, 20, 30, 20),
-                      child: Text(
-                        onboard1_text,
-                        style: TextStyle(color: text_color),
+              ),
+              Expanded(
+                flex: 1,
+                child: Container(
+                  margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                            context,
+                            _createRoute(
+                              WelcomeScreen(),
+                            ),
+                          );
+                        },
+                        child: Text("Skip"),
+                        style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.transparent),
+                            foregroundColor:
+                                MaterialStateProperty.all(text_color)),
                       ),
-                    ),
-                  ],
+                      Column(
+                        children: [
+                          Row(
+                            children: List.generate(
+                              onboard_screens.length,
+                              (index) => buildSlider(index),
+                            ),
+                          )
+                        ],
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          setState(() {
+                            currentPage++;
+                            _pageController.nextPage(
+                                duration: Duration(milliseconds: 800),
+                                curve: Curves.easeInOutExpo);
+                          });
+                          if (currentPage == onboard_screens.length - 1) {
+                            setState(() {
+                              nextPage = "Done";
+                            });
+                          }
+                          if (currentPage == onboard_screens.length) {
+                            Navigator.pushReplacement(
+                              context,
+                              _createRoute(
+                                WelcomeScreen(),
+                              ),
+                            );
+                          }
+                        },
+                        child: Text(nextPage),
+                        style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.transparent),
+                            foregroundColor:
+                                MaterialStateProperty.all(heading1_color)),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Container buildSlider(int index) {
+    return Container(
+      margin: EdgeInsets.only(right: 5),
+      height: 6,
+      width: currentPage == index ? 20 : 6,
+      decoration: BoxDecoration(
+        color: heading1_color,
+        borderRadius: BorderRadius.circular(3),
+      ),
+    );
+  }
+}
+
+Route _createRoute(Widget widget) {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => widget,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      return child;
+    },
+  );
+}
+
+class OnboardContent extends StatelessWidget {
+  const OnboardContent({
+    Key key,
+    this.image_path,
+    this.text,
+  }) : super(key: key);
+  final String image_path, text;
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        SvgPicture.asset(
+          image_path,
+          height: MediaQuery.of(context).size.height / 2.5,
+        ),
+        Container(
+          margin: EdgeInsets.fromLTRB(30, 20, 30, 20),
+          child: Text(
+            text,
+            style: TextStyle(color: text_color),
+          ),
+        ),
+      ],
     );
   }
 }
