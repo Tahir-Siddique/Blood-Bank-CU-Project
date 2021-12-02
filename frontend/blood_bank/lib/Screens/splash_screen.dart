@@ -1,7 +1,7 @@
 import 'package:blood_bank/Screens/onboarding_screen.dart';
 import 'package:blood_bank/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 
 class SplashScreen extends StatelessWidget {
   splashIt(int duration, BuildContext context) {
@@ -30,14 +30,16 @@ class SplashScreen extends StatelessWidget {
     splashIt(3, context);
     return Scaffold(
       body: Stack(
+        fit: StackFit.expand,
         children: [
-          Image.asset(
-            splash_screen_background,
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-          ),
+          // Image.asset(
+          //   splash_screen_background,
+          //   width: MediaQuery.of(context).size.width,
+          //   height: MediaQuery.of(context).size.height,
+          // ),
           Center(
             child: Container(
+              // color: Colors.white,
               child: Column(
                 children: [
                   Expanded(

@@ -1,7 +1,5 @@
-import 'dart:html';
-
 import 'package:blood_bank/Screens/welcome_screen.dart';
-import 'package:blood_bank/constants.dart';
+import 'package:blood_bank/constants.dart' as cn;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -17,6 +15,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   bool isNextPageAvailable = true;
   String nextPage = "Next";
   PageController _pageController;
+  bool isOnboardCompleted = false;
   @override
   Widget build(BuildContext context) {
     _pageController = new PageController();
@@ -24,7 +23,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       body: SafeArea(
         child: Container(
           width: double.infinity,
-          color: background_color,
+          color: cn.background_color,
           child: Column(
             children: [
               Container(
@@ -36,13 +35,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   10,
                 ),
                 child: Text(
-                  become_a_donor_heading1,
-                  style: TextStyle(
-                    color: heading1_color,
-                    fontSize: 32,
-                    fontFamily: "Heebo",
-                    fontWeight: FontWeight.bold,
-                  ),
+                  cn.become_a_donor_heading1,
+                  style: cn.heading_style,
                 ),
               ),
               Expanded(
@@ -51,21 +45,27 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   onPageChanged: (value) => setState(() {
                     currentPage = value;
 
-                    if (currentPage == onboard_screens.length - 1) {
-                      setState(() {
-                        nextPage = "Done";
-                      });
+                    if (currentPage == cn.onboard_screens.length - 1) {
+                      setState(
+                        () {
+                          nextPage = "Done";
+                          isOnboardCompleted = true;
+                        },
+                      );
                     } else {
-                      setState(() {
-                        nextPage = "Next";
-                      });
+                      setState(
+                        () {
+                          nextPage = "Next";
+                          isOnboardCompleted = false;
+                        },
+                      );
                     }
                   }),
                   controller: _pageController,
-                  itemCount: onboard_screens.length,
+                  itemCount: cn.onboard_screens.length,
                   itemBuilder: (context, index) => OnboardContent(
-                    image_path: onboard_screens[index]["image_path"],
-                    text: onboard_screens[index]["text"],
+                    image_path: cn.onboard_screens[index]["image_path"],
+                    text: cn.onboard_screens[index]["text"],
                   ),
                 ),
               ),
@@ -78,25 +78,27 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     children: [
                       TextButton(
                         onPressed: () {
-                          Navigator.pushReplacement(
-                            context,
-                            _createRoute(
-                              WelcomeScreen(),
-                            ),
+                          setState(
+                            () {
+                              currentPage = cn.onboard_screens.length - 1;
+                              _pageController.jumpToPage(currentPage);
+                            },
                           );
                         },
-                        child: Text("Skip"),
+                        child: Text(
+                          (isOnboardCompleted) ? "" : "Skip",
+                          style: cn.text_style,
+                        ),
                         style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(Colors.transparent),
-                            foregroundColor:
-                                MaterialStateProperty.all(text_color)),
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.transparent),
+                        ),
                       ),
                       Column(
                         children: [
                           Row(
                             children: List.generate(
-                              onboard_screens.length,
+                              cn.onboard_screens.length,
                               (index) => buildSlider(index),
                             ),
                           )
@@ -104,18 +106,22 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       ),
                       TextButton(
                         onPressed: () {
-                          setState(() {
-                            currentPage++;
-                            _pageController.nextPage(
-                                duration: Duration(milliseconds: 800),
-                                curve: Curves.easeInOutExpo);
-                          });
-                          if (currentPage == onboard_screens.length - 1) {
-                            setState(() {
-                              nextPage = "Done";
-                            });
+                          setState(
+                            () {
+                              currentPage++;
+                              _pageController.nextPage(
+                                  duration: Duration(milliseconds: 800),
+                                  curve: Curves.easeInCirc);
+                            },
+                          );
+                          if (currentPage == cn.onboard_screens.length - 1) {
+                            setState(
+                              () {
+                                nextPage = "Done";
+                              },
+                            );
                           }
-                          if (currentPage == onboard_screens.length) {
+                          if (currentPage == cn.onboard_screens.length) {
                             Navigator.pushReplacement(
                               context,
                               _createRoute(
@@ -128,8 +134,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         style: ButtonStyle(
                             backgroundColor:
                                 MaterialStateProperty.all(Colors.transparent),
-                            foregroundColor:
-                                MaterialStateProperty.all(heading1_color)),
+                            foregroundColor: MaterialStateProperty.all(
+                                cn.heading_style.color)),
                       ),
                     ],
                   ),
@@ -148,7 +154,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       height: 6,
       width: currentPage == index ? 20 : 6,
       decoration: BoxDecoration(
-        color: heading1_color,
+        color: cn.heading_style.color,
         borderRadius: BorderRadius.circular(3),
       ),
     );
@@ -184,7 +190,7 @@ class OnboardContent extends StatelessWidget {
           margin: EdgeInsets.fromLTRB(30, 20, 30, 20),
           child: Text(
             text,
-            style: TextStyle(color: text_color),
+            style: cn.text_style,
           ),
         ),
       ],
