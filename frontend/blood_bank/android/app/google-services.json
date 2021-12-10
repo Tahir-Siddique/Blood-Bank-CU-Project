@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "773793960364",
+    "project_id": "cu-blood-bank-9bf1c",
+    "storage_bucket": "cu-blood-bank-9bf1c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:773793960364:android:1583fbd1e132657b02aa09",
+        "android_client_info": {
+          "package_name": "com.example.blood_blank"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "773793960364-7lee9b0mfs2c28qc7ktdvqjs4sku6ul9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDCHklmjTSZ2YqF8PHzp59zI7VZXA1-3zg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "773793960364-7lee9b0mfs2c28qc7ktdvqjs4sku6ul9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
