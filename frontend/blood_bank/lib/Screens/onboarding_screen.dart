@@ -61,6 +61,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       );
                     }
                   }),
+                  
                   controller: _pageController,
                   itemCount: cn.onboard_screens.length,
                   itemBuilder: (context, index) => OnboardContent(
