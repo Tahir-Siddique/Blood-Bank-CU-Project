@@ -1,5 +1,8 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:blood_bank/constants.dart' as cn;
+import 'package:country_list_pick/country_list_pick.dart';
 
 class PhoneVerification extends StatefulWidget {
   const PhoneVerification({Key key}) : super(key: key);
@@ -14,16 +17,21 @@ class _PhoneVerificationState extends State<PhoneVerification> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: cn.heading_style.color,
-        title: Text(
-          cn.create_account,
-        ),
-      ),
+      backgroundColor: Colors.white,
       body: Container(
         child: Column(
           children: [
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: 50,
+              margin: EdgeInsets.all(16),
+              alignment: Alignment.centerLeft,
+              child: IconButton(
+                onPressed: () => Navigator.pop(context),
+                icon: Icon(Icons.arrow_back_ios_new),
+                color: Colors.black,
+              ),
+            ),
             Container(
               margin: EdgeInsets.all(50),
               child: Column(
@@ -32,34 +40,20 @@ class _PhoneVerificationState extends State<PhoneVerification> {
                     dropdownValue,
                     "Country",
                     Container(
+                      height: 40,
                       color: cn.background_color,
-                      child: DropdownButton<String>(
-                        value: dropdownValue,
-                        icon: Icon(
-                          Icons.keyboard_arrow_down_outlined,
-                          color: cn.text_style.color,
-                        ),
-                        iconSize: 24,
-                        elevation: 16,
-                        style: cn.text_style,
-                        underline: Container(
-                          height: 0,
-                          color: cn.heading_style.color,
-                        ),
-                        onChanged: (String newValue) {
-                          setState(() {
-                            dropdownValue = newValue;
-                          });
+                      child: CountryListPick(
+                        initialSelection: '+92',
+                        onChanged: (CountryCode code) {
+                          // name of country
+                          print(code.name);
+                          // code of country
+                          print(code.code);
+                          // code phone of country
+                          print(code.dialCode);
+                          // path flag of country
+                          print(code.flagUri);
                         },
-                        items: <String>['One', 'Two', 'Free', 'Four']
-                            .map<DropdownMenuItem<String>>(
-                          (String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          },
-                        ).toList(),
                       ),
                     ),
                     context,
@@ -68,11 +62,33 @@ class _PhoneVerificationState extends State<PhoneVerification> {
                     textinput,
                     "Phone Nummber",
                     Container(
+                      height: 40,
                       color: cn.background_color,
-                      child: Text(""),
+                      child: TextField(
+                        onChanged: (value) => setState(() {
+                          textinput = value;
+                        }),
+                        decoration: InputDecoration(border: InputBorder.none),
+                      ),
                     ),
                     context,
                   ),
+                  getInputWidget(
+                      "",
+                      "",
+                      TextButton(
+                        onPressed: () => {},
+                        child: Text("Submit"),
+                        style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.resolveWith(
+                                (states) => cn.heading_style.color),
+                            foregroundColor: MaterialStateProperty.resolveWith(
+                                (states) => Colors.white),
+                            padding: MaterialStateProperty.resolveWith(
+                                (states) =>
+                                    EdgeInsets.only(top: 20, bottom: 20))),
+                      ),
+                      context)
                 ],
               ),
             )
@@ -90,7 +106,7 @@ Container getInputWidget(
   BuildContext context,
 ) {
   return Container(
-    margin: EdgeInsets.all(50),
+    margin: EdgeInsets.all(20),
     child: Column(
       children: [
         Container(
@@ -103,6 +119,7 @@ Container getInputWidget(
         ),
         Container(
           width: MediaQuery.of(context).size.width,
+          margin: EdgeInsets.all(10),
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(

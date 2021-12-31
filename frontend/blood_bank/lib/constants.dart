@@ -43,7 +43,7 @@ const create_account = "Create Account";
 ///
 ////////////////////////////////////////////////////////////
 const splash_screen_logo = "/svg/logo.svg";
-const home_logo = "/svg/logo2.svg";
+const home_logo = "assets/svg/logo2.svg";
 const welcome_svg = "/svg/welcome.svg";
 const splash_screen_background = "/images/background.png";
 

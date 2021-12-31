@@ -1,3 +1,4 @@
+import 'package:blood_bank/Screens/phone_verification.dart';
 import 'package:flutter/material.dart';
 import 'package:blood_bank/constants.dart' as cn;
 import 'package:flutter_svg/flutter_svg.dart';
@@ -44,7 +45,14 @@ class WelcomeScreen extends StatelessWidget {
               height: MediaQuery.of(context).size.height * .1,
               child: Container(
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      _createRoute(
+                        PhoneVerification(),
+                      ),
+                    );
+                  },
                   child: Text(
                     cn.continue_with_phone,
                     style: TextStyle(color: Colors.white),
@@ -85,4 +93,13 @@ class WelcomeScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+Route _createRoute(Widget widget) {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => widget,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      return child;
+    },
+  );
 }
